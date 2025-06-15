@@ -37,6 +37,28 @@ class Graph {
       delete this.adjacencyList[vertex];
     }
   }
+
+  depthFirstIterative(start) {
+    let stack = [start];
+    const result = [];
+    const visited = {};
+    let currentVertex;
+
+    visited[start] = true;
+    while (stack.length) {
+      currentVertex = stack.pop();
+      result.push(currentVertex);
+
+      this.adjacencyList[currentVertex].forEach((neighbor) => {
+        if (!visited[neighbor]) {
+          visited[neighbor] = true;
+          stack.push(neighbor);
+        }
+      });
+    }
+
+    return result;
+  }
 }
 
 const g = new Graph();
@@ -45,18 +67,28 @@ g.addVertex("B");
 g.addVertex("C");
 g.addVertex("D");
 g.addVertex("E");
+g.addVertex("F");
 
 g.addEdge("A", "B");
-g.addEdge("B", "C");
-g.addEdge("A", "E");
-g.addEdge("B", "E");
+g.addEdge("A", "C");
+g.addEdge("B", "D");
 g.addEdge("C", "E");
 g.addEdge("D", "E");
-
-g.removeEdge("A", "B");
-g.removeEdge("B", "C");
-g.removeEdge("E", "F");
-
-g.removeVertex("E");
+g.addEdge("D", "F");
+g.addEdge("E", "F");
 
 console.log(g);
+
+// Graph {
+//     adjacencyList: {
+//       A: [ 'B', 'C' ],
+//       B: [ 'A', 'D' ],
+//       C: [ 'A', 'E' ],
+//       D: [ 'B', 'E', 'F' ],
+//       E: [ 'C', 'D', 'F' ],
+//       F: [ 'D', 'E' ]
+//     }
+//   }
+
+console.log(g.depthFirstIterative("A"));
+// [ 'A', 'C', 'E', 'F', 'D', 'B' ]
